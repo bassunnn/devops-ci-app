@@ -7,6 +7,12 @@
       - ansible_architecture == "x86_64"
     fail_msg: "Требуется Ubuntu Server 24.04 amd64"
 
+- name: Use global Ubuntu archive mirror
+  ansible.builtin.replace:
+    path: /etc/apt/sources.list.d/ubuntu.sources
+    regexp: 'http://ru\.archive\.ubuntu\.com/ubuntu/'
+    replace: 'http://archive.ubuntu.com/ubuntu/'
+
 - name: Install base packages and remote module dependencies
   ansible.builtin.apt:
     name:
@@ -42,6 +48,7 @@
       - docker-compose-plugin
     state: present
     update_cache: true
+    cache_valid_time: 3600
 
 - name: Enable Docker service
   ansible.builtin.service:
